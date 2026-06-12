@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use protocol::ClientMessage;
+use wasm_bindgen::JsCast;
 
 use crate::bridge::{Bridge, send};
 use crate::state::TemplateState;
@@ -12,7 +13,13 @@ pub fn Hud(
     bridge: StoredValue<Option<Bridge>, LocalStorage>,
     state: TemplateState,
 ) -> impl IntoView {
-    let on_spawn = move |_| {
+    let on_spawn = move |event: web_sys::MouseEvent| {
+        if let Some(button) = event
+            .target()
+            .and_then(|target| target.dyn_into::<web_sys::HtmlElement>().ok())
+        {
+            let _ = button.blur();
+        }
         if let Some(bridge) = bridge.get_value() {
             send(&bridge, &ClientMessage::SpawnCube);
         }
