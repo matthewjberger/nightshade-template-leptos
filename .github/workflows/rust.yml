@@ -12,9 +12,11 @@ jobs:
       # Installs rust, wasm-bindgen, wasm-opt, and trunk as pinned in mise.toml.
       - uses: jdx/mise-action@v2
 
-      # mise delegates rust to rustup, which does not pick up the target on a
-      # machine that already has rust, so add it explicitly.
+      # mise delegates rust to rustup, which does not pick up the target or
+      # the components on a machine that already has rust, so add them
+      # explicitly.
       - run: rustup target add wasm32-unknown-unknown
+      - run: rustup component add rustfmt clippy
 
       - uses: Swatinem/rust-cache@v2
 
