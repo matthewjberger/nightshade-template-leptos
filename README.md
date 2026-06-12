@@ -2,8 +2,6 @@
 
 A template for building [Nightshade](https://github.com/matthewjberger/nightshade) apps with the Leptos/webview architecture. The whole engine runs inside a web worker against an OffscreenCanvas and renders through WebGPU off the main thread. A [Leptos](https://leptos.dev) UI drives it from the main thread, and a native webview shell turns the same bundle into a desktop app.
 
-This is the same architecture as the [nightshade-viewer](https://github.com/matthewjberger/nightshade-viewer) and the Nightshade editor, reduced to a skeleton you can grow a game from. For a plain winit/native template instead, see the engine's `template/` crate.
-
 ## Workspace
 
 - `protocol`, the message and data types both sides share, plus the postMessage envelope keys.
