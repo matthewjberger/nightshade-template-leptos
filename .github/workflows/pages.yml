@@ -14,6 +14,10 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# Run the JavaScript actions on Node 24 (Node 20 is being retired).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,7 +40,7 @@ jobs:
           wasm-opt -O3 --enable-simd runtime/engine_bg.wasm -o runtime/engine_bg.wasm
 
       - name: Build the Leptos bundle
-        run: trunk build --release --public-url /${{ github.event.repository.name }}/
+        run: trunk build --release --public-url /nightshade-template-leptos/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
