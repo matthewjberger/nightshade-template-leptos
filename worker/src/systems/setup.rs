@@ -14,7 +14,6 @@ pub fn initialize(template_world: &mut TemplateWorld, world: &mut World) {
             });
     }
     world.resources.render_settings.atmosphere = Atmosphere::Nebula;
-    capture_procedural_atmosphere_ibl(world, Atmosphere::Nebula, 0.0);
     world.resources.debug_draw.show_grid = true;
     world.resources.debug_draw.selection_outline_enabled = true;
     world.resources.debug_draw.selection_outline_color = [1.0, 0.5, 0.15, 1.0];
