@@ -7,6 +7,7 @@
 mod ecs;
 mod systems;
 
+use nightshade_api::offscreen::OffscreenConfig;
 use wasm_bindgen::prelude::*;
 
 use crate::ecs::TemplateWorld;
@@ -14,6 +15,7 @@ use crate::ecs::TemplateWorld;
 #[wasm_bindgen(start)]
 pub fn start() {
     nightshade_api::offscreen::run_offscreen(
+        OffscreenConfig::default(),
         TemplateWorld::default(),
         systems::setup::initialize,
         systems::example::tick,
