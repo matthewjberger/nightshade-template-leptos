@@ -92,14 +92,6 @@ body {
   cursor: default;
 }
 
-.hud-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 2px;
-  cursor: pointer;
-}
-
 .hud-hint {
   margin-top: 4px;
   color: var(--text-dim);
