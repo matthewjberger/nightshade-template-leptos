@@ -16,7 +16,5 @@ freecs::ecs! {
     }
     Resources {
         example: ExampleState,
-        selection: Selection,
-        picking: Picking,
     }
 }

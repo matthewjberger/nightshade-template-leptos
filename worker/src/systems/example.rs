@@ -1,6 +1,7 @@
 use crate::ecs::TemplateWorld;
 use nightshade::prelude::*;
-use protocol::WorkerMessage;
+use protocol::{Command, Event};
+use serde_json::Value;
 
 const SPIN_RADIANS_PER_SECOND: f32 = 0.8;
 const RING_RADIUS: f32 = 3.0;
@@ -9,7 +10,7 @@ const GOLDEN_ANGLE_RADIANS: f32 = 2.399_963;
 /// Example system. Each system is a free function that takes
 /// `&mut TemplateWorld` for app-specific state and `&mut World` for the
 /// engine's renderer-visible world. Add more files in `src/systems/` and
-/// register them in `src/systems.rs` to grow your game.
+/// call them from the `run_offscreen` tick to grow your game.
 ///
 /// This one spins every spawned cube and spawns another on Space.
 pub fn tick(template_world: &mut TemplateWorld, world: &mut World) {
@@ -33,6 +34,30 @@ pub fn tick(template_world: &mut TemplateWorld, world: &mut World) {
     }
 }
 
+/// Handles the game messages the page sends over the `Custom` channel.
+/// `selected` is the entity picked by the driver's built-in click handling.
+pub fn apply_custom(
+    template_world: &mut TemplateWorld,
+    world: &mut World,
+    selected: Option<Entity>,
+    value: Value,
+) {
+    let Ok(command) = serde_json::from_value::<Command>(value) else {
+        return;
+    };
+    match command {
+        Command::SpawnCube => spawn_cube(template_world, world),
+        Command::GrowSelected => {
+            if let Some(entity) = selected {
+                if let Some(transform) = world.core.get_local_transform_mut(entity) {
+                    transform.scale *= 1.2;
+                }
+                mark_local_transform_dirty(world, entity);
+            }
+        }
+    }
+}
+
 /// Spawns a cube on a ring around the origin, names it, and reports the new
 /// count to the page.
 pub fn spawn_cube(template_world: &mut TemplateWorld, world: &mut World) {
@@ -46,5 +71,5 @@ pub fn spawn_cube(template_world: &mut TemplateWorld, world: &mut World) {
     let cube = spawn_cube_at(world, position);
     world.core.set_name(cube, Name(format!("Cube {count}")));
     template_world.resources.example.cubes.push(cube);
-    crate::post(&WorkerMessage::CubeCount { count: count + 1 });
+    nightshade_api::offscreen::post_custom(&Event::CubeCount { count: count + 1 });
 }
