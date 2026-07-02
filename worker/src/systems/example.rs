@@ -21,7 +21,6 @@ pub fn tick(template_world: &mut TemplateWorld, world: &mut World) {
         if let Some(transform) = world.core.get_local_transform_mut(cube) {
             transform.rotation = spin * transform.rotation;
         }
-        mark_local_transform_dirty(world, cube);
     }
 
     let events = std::mem::take(&mut world.resources.input.events);
@@ -52,7 +51,6 @@ pub fn apply_custom(
                 if let Some(transform) = world.core.get_local_transform_mut(entity) {
                     transform.scale *= 1.2;
                 }
-                mark_local_transform_dirty(world, entity);
             }
         }
     }
