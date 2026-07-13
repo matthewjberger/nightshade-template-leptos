@@ -4,8 +4,7 @@ use nightshade::prelude::*;
 
 /// Builds the scene: atmosphere, lighting, camera, and the first cube.
 pub fn initialize(template_resources: &mut TemplateResources, world: &mut World) {
-    let game_world_index = world.ecs.add_world(register_template_components());
-    assert_eq!(game_world_index, GAME);
+    world.ecs.add_world_at(GAME, register_template_components());
 
     if let Some((width, height)) = world.resources.window.cached_viewport_size {
         world.resources.window.active_viewport_rect =
