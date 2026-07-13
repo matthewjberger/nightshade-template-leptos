@@ -1,4 +1,4 @@
-use crate::ecs::TemplateWorld;
+use crate::ecs::TemplateResources;
 use nightshade::prelude::*;
 use protocol::{Command, Event};
 use serde_json::Value;
@@ -8,16 +8,16 @@ const RING_RADIUS: f32 = 3.0;
 const GOLDEN_ANGLE_RADIANS: f32 = 2.399_963;
 
 /// Example system. Each system is a free function that takes
-/// `&mut TemplateWorld` for app-specific state and `&mut World` for the
+/// `&mut TemplateResources` for app-specific state and `&mut World` for the
 /// engine's renderer-visible world. Add more files in `src/systems/` and
 /// call them from the `run_offscreen` tick to grow your game.
 ///
 /// This one spins every spawned cube and spawns another on Space.
-pub fn tick(template_world: &mut TemplateWorld, world: &mut World) {
+pub fn tick(template_resources: &mut TemplateResources, world: &mut World) {
     let delta_time = world.resources.window.timing.delta_time;
     let spin = nalgebra_glm::quat_angle_axis(SPIN_RADIANS_PER_SECOND * delta_time, &Vec3::y());
-    for index in 0..template_world.resources.example.cubes.len() {
-        let cube = template_world.resources.example.cubes[index];
+    for index in 0..template_resources.example.cubes.len() {
+        let cube = template_resources.example.cubes[index];
         if let Some(transform) = world.ecs.worlds[CORE].get_mut::<nightshade::ecs::transform::components::LocalTransform>(cube) {
             transform.rotation = spin * transform.rotation;
         }
@@ -28,7 +28,7 @@ pub fn tick(template_world: &mut TemplateWorld, world: &mut World) {
         if let AppEvent::Keyboard { key, state } = event
             && matches!((key, state), (KeyCode::Space, KeyState::Pressed))
         {
-            spawn_cube(template_world, world);
+            spawn_cube(template_resources, world);
         }
     }
 }
@@ -36,7 +36,7 @@ pub fn tick(template_world: &mut TemplateWorld, world: &mut World) {
 /// Handles the game messages the page sends over the `Custom` channel.
 /// `selected` is the entity picked by the driver's built-in click handling.
 pub fn apply_custom(
-    template_world: &mut TemplateWorld,
+    template_resources: &mut TemplateResources,
     world: &mut World,
     selected: Option<Entity>,
     value: Value,
@@ -45,7 +45,7 @@ pub fn apply_custom(
         return;
     };
     match command {
-        Command::SpawnCube => spawn_cube(template_world, world),
+        Command::SpawnCube => spawn_cube(template_resources, world),
         Command::GrowSelected => {
             if let Some(entity) = selected {
                 if let Some(transform) = world.ecs.worlds[CORE].get_mut::<nightshade::ecs::transform::components::LocalTransform>(entity) {
@@ -58,8 +58,8 @@ pub fn apply_custom(
 
 /// Spawns a cube on a ring around the origin, names it, and reports the new
 /// count to the page.
-pub fn spawn_cube(template_world: &mut TemplateWorld, world: &mut World) {
-    let count = template_world.resources.example.cubes.len() as u32;
+pub fn spawn_cube(template_resources: &mut TemplateResources, world: &mut World) {
+    let count = template_resources.example.cubes.len() as u32;
     let position = if count == 0 {
         Vec3::new(0.0, 0.5, 0.0)
     } else {
@@ -68,6 +68,6 @@ pub fn spawn_cube(template_world: &mut TemplateWorld, world: &mut World) {
     };
     let cube = spawn_cube_at(world, position);
     world.ecs.worlds[CORE].set(cube, Name(format!("Cube {count}")));
-    template_world.resources.example.cubes.push(cube);
+    template_resources.example.cubes.push(cube);
     nightshade_api::offscreen::post_custom(&Event::CubeCount { count: count + 1 });
 }
