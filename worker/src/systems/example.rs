@@ -18,7 +18,7 @@ pub fn tick(template_world: &mut TemplateWorld, world: &mut World) {
     let spin = nalgebra_glm::quat_angle_axis(SPIN_RADIANS_PER_SECOND * delta_time, &Vec3::y());
     for index in 0..template_world.resources.example.cubes.len() {
         let cube = template_world.resources.example.cubes[index];
-        if let Some(transform) = world.core.get_local_transform_mut(cube) {
+        if let Some(transform) = world.ecs.worlds[CORE].get_mut::<nightshade::ecs::transform::components::LocalTransform>(cube) {
             transform.rotation = spin * transform.rotation;
         }
     }
@@ -48,7 +48,7 @@ pub fn apply_custom(
         Command::SpawnCube => spawn_cube(template_world, world),
         Command::GrowSelected => {
             if let Some(entity) = selected {
-                if let Some(transform) = world.core.get_local_transform_mut(entity) {
+                if let Some(transform) = world.ecs.worlds[CORE].get_mut::<nightshade::ecs::transform::components::LocalTransform>(entity) {
                     transform.scale *= 1.2;
                 }
             }
@@ -67,7 +67,7 @@ pub fn spawn_cube(template_world: &mut TemplateWorld, world: &mut World) {
         Vec3::new(angle.cos() * RING_RADIUS, 0.5, angle.sin() * RING_RADIUS)
     };
     let cube = spawn_cube_at(world, position);
-    world.core.set_name(cube, Name(format!("Cube {count}")));
+    world.ecs.worlds[CORE].set(cube, Name(format!("Cube {count}")));
     template_world.resources.example.cubes.push(cube);
     nightshade_api::offscreen::post_custom(&Event::CubeCount { count: count + 1 });
 }
