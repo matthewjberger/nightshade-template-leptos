@@ -18,7 +18,9 @@ pub fn tick(template_resources: &mut TemplateResources, world: &mut World) {
     let spin = nalgebra_glm::quat_angle_axis(SPIN_RADIANS_PER_SECOND * delta_time, &Vec3::y());
     for index in 0..template_resources.example.cubes.len() {
         let cube = template_resources.example.cubes[index];
-        if let Some(transform) = world.get_mut::<nightshade::ecs::transform::components::LocalTransform>(cube) {
+        if let Some(transform) =
+            world.get_mut::<nightshade::ecs::transform::components::LocalTransform>(cube)
+        {
             transform.rotation = spin * transform.rotation;
         }
     }
@@ -48,7 +50,9 @@ pub fn apply_custom(
         Command::SpawnCube => spawn_cube(template_resources, world),
         Command::GrowSelected => {
             if let Some(entity) = selected {
-                if let Some(transform) = world.get_mut::<nightshade::ecs::transform::components::LocalTransform>(entity) {
+                if let Some(transform) =
+                    world.get_mut::<nightshade::ecs::transform::components::LocalTransform>(entity)
+                {
                     transform.scale *= 1.2;
                 }
             }
