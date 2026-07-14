@@ -17,8 +17,8 @@ pub fn initialize(template_resources: &mut TemplateResources, world: &mut World)
     }
     world.resources.render_settings.atmosphere = Atmosphere::Nebula;
     world.resources.debug_draw.show_grid = true;
-    world.resources.debug_draw.selection_outline_enabled = true;
-    world.resources.debug_draw.selection_outline_color = [1.0, 0.5, 0.15, 1.0];
+    world.resources.selection.outline_enabled = true;
+    world.resources.selection.outline_color = [1.0, 0.5, 0.15, 1.0];
 
     spawn_sun(world);
 
