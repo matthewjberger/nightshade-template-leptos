@@ -6,19 +6,31 @@ use nightshade::prelude::*;
 pub fn initialize(template_resources: &mut TemplateResources, world: &mut World) {
     world.ecs.add_world_at(GAME, register_template_components());
 
-    if let Some((width, height)) = world.resources.window.cached_viewport_size {
-        world.resources.window.active_viewport_rect =
-            Some(nightshade::render::config::ViewportRect {
-                x: 0.0,
-                y: 0.0,
-                width: width as f32,
-                height: height as f32,
-            });
+    if let Some((width, height)) = world
+        .expect_resource::<nightshade::ecs::window::resources::Window>()
+        .cached_viewport_size
+    {
+        world
+            .expect_resource_mut::<nightshade::ecs::window::resources::Window>()
+            .active_viewport_rect = Some(nightshade::render::config::ViewportRect {
+            x: 0.0,
+            y: 0.0,
+            width: width as f32,
+            height: height as f32,
+        });
     }
-    world.resources.render_settings.atmosphere = Atmosphere::Nebula;
-    world.resources.debug_draw.show_grid = true;
-    world.resources.selection.outline_enabled = true;
-    world.resources.selection.outline_color = [1.0, 0.5, 0.15, 1.0];
+    world
+        .expect_resource_mut::<nightshade::render::config::RenderSettings>()
+        .atmosphere = Atmosphere::Nebula;
+    world
+        .expect_resource_mut::<nightshade::render::config::DebugDraw>()
+        .show_grid = true;
+    world
+        .expect_resource_mut::<nightshade::ecs::graphics::selection::Selection>()
+        .outline_enabled = true;
+    world
+        .expect_resource_mut::<nightshade::ecs::graphics::selection::Selection>()
+        .outline_color = [1.0, 0.5, 0.15, 1.0];
 
     spawn_sun(world);
 
