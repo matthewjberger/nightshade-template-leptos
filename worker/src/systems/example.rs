@@ -49,12 +49,11 @@ pub fn apply_custom(
     match command {
         Command::SpawnCube => spawn_cube(template_resources, world),
         Command::GrowSelected => {
-            if let Some(entity) = selected {
-                if let Some(transform) =
+            if let Some(entity) = selected
+                && let Some(transform) =
                     world.get_mut::<nightshade::ecs::transform::components::LocalTransform>(entity)
-                {
-                    transform.scale *= 1.2;
-                }
+            {
+                transform.scale *= 1.2;
             }
         }
     }
