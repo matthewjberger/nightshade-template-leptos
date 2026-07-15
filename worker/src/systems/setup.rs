@@ -42,7 +42,7 @@ pub fn initialize(template_resources: &mut TemplateResources, world: &mut World)
         0.4,
         "Main Camera".to_string(),
     );
-    world.resources.active_camera = Some(camera);
+    world.expect_resource_mut::<ActiveCamera>().0 = Some(camera);
 
     example::spawn_cube(template_resources, world);
 }
