@@ -15,7 +15,7 @@ const GOLDEN_ANGLE_RADIANS: f32 = 2.399_963;
 /// This one spins every spawned cube and spawns another on Space.
 pub fn tick(template_resources: &mut TemplateResources, world: &mut World) {
     let delta_time = world
-        .expect_resource::<nightshade::ecs::window::resources::Window>()
+        .res::<nightshade::ecs::window::resources::Window>()
         .timing
         .delta_time;
     let spin = nalgebra_glm::quat_angle_axis(SPIN_RADIANS_PER_SECOND * delta_time, &Vec3::y());
@@ -30,7 +30,7 @@ pub fn tick(template_resources: &mut TemplateResources, world: &mut World) {
 
     let events = std::mem::take(
         &mut world
-            .expect_resource::<nightshade::ecs::input::resources::Input>()
+            .res::<nightshade::ecs::input::resources::Input>()
             .events,
     );
     for event in events {
