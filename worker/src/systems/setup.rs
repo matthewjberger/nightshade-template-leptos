@@ -11,7 +11,7 @@ pub fn initialize(template_resources: &mut TemplateResources, world: &mut World)
         .cached_viewport_size
     {
         world
-            .expect_resource_mut::<nightshade::ecs::window::resources::Window>()
+            .expect_resource::<nightshade::ecs::window::resources::Window>()
             .active_viewport_rect = Some(nightshade::render::config::ViewportRect {
             x: 0.0,
             y: 0.0,
@@ -20,16 +20,16 @@ pub fn initialize(template_resources: &mut TemplateResources, world: &mut World)
         });
     }
     world
-        .expect_resource_mut::<nightshade::render::config::RenderSettings>()
+        .expect_resource::<nightshade::render::config::RenderSettings>()
         .atmosphere = Atmosphere::Nebula;
     world
-        .expect_resource_mut::<nightshade::render::config::DebugDraw>()
+        .expect_resource::<nightshade::render::config::DebugDraw>()
         .show_grid = true;
     world
-        .expect_resource_mut::<nightshade::ecs::graphics::selection::Selection>()
+        .expect_resource::<nightshade::ecs::graphics::selection::Selection>()
         .outline_enabled = true;
     world
-        .expect_resource_mut::<nightshade::ecs::graphics::selection::Selection>()
+        .expect_resource::<nightshade::ecs::graphics::selection::Selection>()
         .outline_color = [1.0, 0.5, 0.15, 1.0];
 
     spawn_sun(world);
@@ -42,7 +42,7 @@ pub fn initialize(template_resources: &mut TemplateResources, world: &mut World)
         0.4,
         "Main Camera".to_string(),
     );
-    world.expect_resource_mut::<ActiveCamera>().0 = Some(camera);
+    world.expect_resource::<ActiveCamera>().0 = Some(camera);
 
     example::spawn_cube(template_resources, world);
 }

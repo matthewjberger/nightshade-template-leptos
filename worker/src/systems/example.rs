@@ -30,7 +30,7 @@ pub fn tick(template_resources: &mut TemplateResources, world: &mut World) {
 
     let events = std::mem::take(
         &mut world
-            .expect_resource_mut::<nightshade::ecs::input::resources::Input>()
+            .expect_resource::<nightshade::ecs::input::resources::Input>()
             .events,
     );
     for event in events {
