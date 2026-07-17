@@ -21,13 +21,13 @@ pub fn initialize(template_resources: &mut TemplateResources, world: &mut World)
 
     spawn_sun(world);
 
-    let camera = spawn_pan_orbit_camera(
+    let camera = spawn_pan_orbit_camera_at(
         world,
         Vec3::new(0.0, 0.5, 0.0),
         8.0,
         0.6,
         0.4,
-        "Main Camera".to_string(),
+        "Pan Orbit Camera".to_string(),
     );
     world.res_mut::<ActiveCamera>().0 = Some(camera);
 
