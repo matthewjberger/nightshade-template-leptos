@@ -6,31 +6,18 @@ use nightshade::prelude::*;
 pub fn initialize(template_resources: &mut TemplateResources, world: &mut World) {
     world.ecs.add_world_at(GAME, register_template_components());
 
-    if let Some((width, height)) = world
-        .res::<nightshade::ecs::window::resources::Window>()
-        .cached_viewport_size
-    {
-        world
-            .res::<nightshade::ecs::window::resources::Window>()
-            .active_viewport_rect = Some(nightshade::render::config::ViewportRect {
+    if let Some((width, height)) = world.res::<Window>().cached_viewport_size {
+        world.res_mut::<Window>().active_viewport_rect = Some(ViewportRect {
             x: 0.0,
             y: 0.0,
             width: width as f32,
             height: height as f32,
         });
     }
-    world
-        .res::<nightshade::render::config::RenderSettings>()
-        .atmosphere = Atmosphere::Nebula;
-    world
-        .res::<nightshade::render::config::DebugDraw>()
-        .show_grid = true;
-    world
-        .res::<nightshade::ecs::graphics::selection::Selection>()
-        .outline_enabled = true;
-    world
-        .res::<nightshade::ecs::graphics::selection::Selection>()
-        .outline_color = [1.0, 0.5, 0.15, 1.0];
+    world.res_mut::<RenderSettings>().atmosphere = Atmosphere::Nebula;
+    world.res_mut::<DebugDraw>().show_grid = true;
+    world.res_mut::<Selection>().outline_enabled = true;
+    world.res_mut::<Selection>().outline_color = [1.0, 0.5, 0.15, 1.0];
 
     spawn_sun(world);
 
@@ -42,7 +29,7 @@ pub fn initialize(template_resources: &mut TemplateResources, world: &mut World)
         0.4,
         "Main Camera".to_string(),
     );
-    world.res::<ActiveCamera>().0 = Some(camera);
+    world.res_mut::<ActiveCamera>().0 = Some(camera);
 
     example::spawn_cube(template_resources, world);
 }
