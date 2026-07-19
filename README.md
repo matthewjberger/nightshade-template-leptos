@@ -5,7 +5,7 @@ A template for building [Nightshade](https://github.com/matthewjberger/nightshad
 ## Workspace
 
 - `protocol`, the game message enums both sides share, carried as `Custom` payloads on the engine wire.
-- `worker`, the wasm module inside the web worker. The game logic against the raw `nightshade` engine plus a `TemplateWorld` (its own `freecs` world), driven by system functions in `worker/src/systems/`.
+- `worker`, the wasm module inside the web worker. The game logic against the raw `nightshade` engine plus a `TemplateWorld` (its own `nightshade_ecs` world), driven by system functions in `worker/src/systems/`.
 - the root crate (`page`), the Leptos UI. An `EngineViewport` from `nightshade_api::web`, an example HUD, and the game-specific page state as grouped signals.
 - `desktop`, the native shell: a webview window over the web bundle, served from an ephemeral localhost port.
 
@@ -26,7 +26,7 @@ The page and the worker share nothing but messages. The transport (forwarded poi
 
 The page creates an engine handle with `use_engine`, renders an `EngineViewport`, sends `Command`s with `engine.send`, and receives `Event`s through `engine.on_custom`. Renderer facts (ready, adapter, FPS, entities, selection) arrive on the handle's reactive `EngineState`.
 
-The worker hands `nightshade_api::offscreen::run_offscreen` the driver config and the `TemplateWorld` (its own `freecs` world for game components and resources, declared in `worker/src/ecs.rs`), then a setup function, a per-frame tick, and a `Command` handler, all free functions in `worker/src/systems/`. The example system spins every spawned cube and spawns another on Space or when the HUD button sends `SpawnCube`.
+The worker hands `nightshade_api::offscreen::run_offscreen` the driver config and the `TemplateWorld` (its own `nightshade_ecs` world for game components and resources, declared in `worker/src/ecs.rs`), then a setup function, a per-frame tick, and a `Command` handler, all free functions in `worker/src/systems/`. The example system spins every spawned cube and spawns another on Space or when the HUD button sends `SpawnCube`.
 
 Picking is built in: a click or tap without drag picks synchronously, drives the engine's selection outline, reports the selection to the page, and hands it to the `Command` handler. The `Grow Selected` button shows the round trip end to end.
 

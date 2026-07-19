@@ -1,5 +1,5 @@
 use nightshade::prelude::Entity;
-use nightshade::prelude::freecs;
+use nightshade::prelude::nightshade_ecs;
 use nightshade::prelude::serde::{Deserialize, Serialize};
 
 /// Marker component for template-specific entities. Replace, rename, or add
@@ -9,7 +9,7 @@ use nightshade::prelude::serde::{Deserialize, Serialize};
 #[serde(crate = "nightshade::prelude::serde")]
 pub struct Marker;
 
-freecs::dynamic_schema! {
+nightshade_ecs::dynamic_schema! {
     pub fn register_template_components {
         marker: Marker => MARKER,
     }
