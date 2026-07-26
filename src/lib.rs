@@ -4,7 +4,7 @@
 //!
 //! The engine runs in a web worker on an `OffscreenCanvas`. The worker seam
 //! (canvas transfer, input forwarding, picking, stats) is
-//! `nightshade_api::web` on this side and `nightshade_api::offscreen` on the
+//! `nightshade_leptos` on this side and `nightshade_api::offscreen` on the
 //! worker side, so this crate is only the page: the game state, the HUD, and
 //! the game messages.
 //!
