@@ -6,14 +6,6 @@ use nightshade::prelude::*;
 pub fn initialize(template_resources: &mut TemplateResources, world: &mut World) {
     world.ecs.add_world_at(GAME, register_template_components());
 
-    if let Some((width, height)) = world.res::<Window>().cached_viewport_size {
-        world.res_mut::<Window>().active_viewport_rect = Some(ViewportRect {
-            x: 0.0,
-            y: 0.0,
-            width: width as f32,
-            height: height as f32,
-        });
-    }
     world.res_mut::<RenderSettings>().atmosphere = Atmosphere::Nebula;
     world.res_mut::<DebugDraw>().show_grid = true;
     world.res_mut::<Selection>().outline_enabled = true;
